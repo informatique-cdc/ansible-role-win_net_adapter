@@ -1,0 +1,45 @@
+---
+- hosts: all
+  gather_facts: false
+
+  roles:
+    - win_net_adapter
+
+  tasks:
+
+    - name: Should renames a netcard
+      win_net_adapter:
+        suffix_filter: oob*
+        new_Name: OOB
+
+    - name: Should disable the tcp ipv6 protocole
+      win_net_adapter:
+        suffix_filter: oob*
+        tcpip6: false
+
+    - name: Should return the register_ip_address state
+      win_net_adapter:
+        suffix_filter: oob*
+        register_ip_address: false
+
+    - name: Should reset the server addresses
+      win_net_adapter:
+        suffix_filter: consoto.com
+        reset_server_addresses: true
+
+    - name: Should change the server addresses
+      win_net_adapter:
+        suffix_filter: consoto.com
+        server_addresses: 8.8.8.8,8.8.8.4
+
+    - name: Should renames and configure multiple netcards
+      win_net_adapter:
+        suffix_filter: consoto.local,*.consoto.local
+        new_name: OOB
+        reset_server_addresses: true
+        register_ip_address: false
+
+    - name: Should disable the tcp ipv6 protocole on all cards
+      win_net_adapter:
+        suffix_filter: '*'
+        tcpip6: false
